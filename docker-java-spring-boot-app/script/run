@@ -1,0 +1,15 @@
+#!/bin/bash
+
+set -e
+
+DEV_IMAGE_NAME=spring-boot-app-dev
+
+docker build -t ${DEV_IMAGE_NAME} -f Dockerfile.build .
+
+exec docker run --rm \
+    -e TAG \
+    -e REPO \
+    -v /var/run/docker.sock:/var/run/docker.sock \
+    -v $HOME/.m2:/root/.m2 \
+    -v $HOME/.docker/config.json:/root/.docker/config.json \
+    ${DEV_IMAGE_NAME} $*
